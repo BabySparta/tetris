@@ -1,0 +1,12 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(20, 1fr);  
+}
+
+.cell {
+  height: calc(80vh/20);
+  aspect-ratio: 1/1;
+  background-color: blue;
+  border: solid rgb(0, 0, 136) 1px;
+}
