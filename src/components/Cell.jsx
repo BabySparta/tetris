@@ -1,6 +1,8 @@
-function Cell() {
+import React from "react";
+
+function Cell({ type }) {
   return (
-    <div className="cell"></div>
+    <div className="cell" id={type !== 0 ? "fill" : "empty"}></div>
   )
 }
 

@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { createBoard } from "../utils/heplers";
+import { useBoard } from "../hooks/useBoard";
 import Board from "./Board";
 import "../styles/game.css"
 
 function Game() {
-  const [board, setBoard] = useState(createBoard());
+  const [board, setBoard] = useBoard();
+  const [gameSpeed, setGameSpeed] = useState(1000);
+
+  //setTimeout(gameSpeed, )
   return (
     <Board board={board} />
   )

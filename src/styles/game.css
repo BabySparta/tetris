@@ -7,6 +7,10 @@
 .cell {
   height: calc(80vh/20);
   aspect-ratio: 1/1;
-  background-color: blue;
+  background-color: rgb(73, 73, 124);
   border: solid rgb(0, 0, 136) 1px;
+}
+
+#fill {
+  background-color: green;
 }
