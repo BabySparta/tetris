@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { checkCollision } from "../utils/heplers";
 
 export const usePlayer = () => {
   const [player, setPlayer] = useState({
