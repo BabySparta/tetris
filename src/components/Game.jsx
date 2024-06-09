@@ -15,15 +15,25 @@ function Game() {
     updatePosition(0, 1);
   };
 
+  const dropMax = () => {
+    let squaresToDrop = 0;
+    while(board[player.yPos + squaresToDrop + 1] && board[player.yPos + squaresToDrop + 1][player.xPos][1] === "clear") {
+      squaresToDrop++;
+    }
+    updatePosition(0, squaresToDrop);
+  }
   const move = ({ key }) => {
     if (key === "a") {
       if (!checkCollision(board, player, -1)) updatePosition(-1, 0);
     } else if (key === "d") {
       if (!checkCollision(board, player, 1)) updatePosition(1, 0);
     } else if (key === "s") {
-      updatePosition(0, 1);
+      drop();
+    } else if (key === ' ') {
+      dropMax();
     }
   };
+
 
   useEffect(() => {
     document.addEventListener("keydown", move);

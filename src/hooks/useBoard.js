@@ -28,8 +28,10 @@ export const useBoard = (player, resetPlayer) => {
         checkCollision(newBoard, player) ? "merged" : "clear",
       ];
 
-      if (checkCollision(newBoard, player)) resetPlayer();
-      
+      if (checkCollision(newBoard, player)) {
+        newBoard = sweepRows(newBoard);
+        resetPlayer();
+      }
       return newBoard;
     };
 
