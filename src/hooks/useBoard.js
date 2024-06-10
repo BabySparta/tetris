@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { checkCollision, createBoard } from "../utils/heplers";
+import { checkCollision, checkLoss, createBoard } from "../utils/heplers";
 
 export const useBoard = (player, resetPlayer) => {
   const [board, setBoard] = useState(createBoard());
@@ -30,6 +30,9 @@ export const useBoard = (player, resetPlayer) => {
 
       if (checkCollision(newBoard, player)) {
         newBoard = sweepRows(newBoard);
+        if (checkLoss(newBoard)) {
+          return newBoard;
+        }
         resetPlayer();
       }
       return newBoard;
