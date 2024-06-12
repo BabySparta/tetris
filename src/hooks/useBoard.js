@@ -29,13 +29,13 @@ export const useBoard = (player, resetPlayer) => {
           if(value !== 0) {
             newBoard[y + player.yPos][x + player.xPos] = [
               value,
-              checkCollision(newBoard, player, 0, 0) ? 'merged' : 'clear'
+              checkCollision(newBoard, player, 0, 1) ? 'merged' : 'clear'
             ]
           }
         })
       })      
 
-      if (checkCollision(newBoard, player, 0, 0)) {
+      if (checkCollision(newBoard, player, 0, 1)) {
         newBoard = sweepRows(newBoard);
         if (checkLoss(newBoard)) {
           return newBoard;

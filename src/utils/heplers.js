@@ -5,16 +5,19 @@ export const checkCollision = (board, player, xDir, yDir) => {
   for(let y = 0; y < player.tetromino.length; y++) {
     for(let x = 0; x < player.tetromino[y].length; x++) {
       if(player.tetromino[y][x] !== 0) {
-        console.log(!board[y + player.yPos + yDir], !board[player.yPos][x+player.xPos + xDir], board[y + player.yPos + yDir][x + player.xPos + xDir][1] === 'merged')
         // Check that square does not go past the bottom
-        if (!board[y + player.yPos + yDir]) return true;
         // Check that the square does not leave the board in xDir
-        if (!board[player.yPos][x+player.xPos + xDir]) return true;
         // Check the square being moved into isnt occupied
-        if(board[y + player.yPos + yDir][x + player.xPos + xDir][1] === 'merged') return true
+        if (!board[y + player.yPos + yDir] ||
+           !board[player.yPos][x+player.xPos + xDir] ||
+            board[y + player.yPos + yDir][x + player.xPos + xDir][1] === 'merged'
+          ) {
+            return true;
+          }
       }
     }
   }
+  return false
   // if (player.yPos === 19) return true;
   // if (player.xPos + dir < 0 || player.xPos + dir > 9) return true;
   // if (dir && board[player.yPos][player.xPos + dir][1] === "merged") return true;

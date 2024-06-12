@@ -6,7 +6,7 @@ import { usePlayer } from "../hooks/usePlayer";
 import { checkCollision } from "../utils/heplers";
 
 function Game() {
-  const [player, updatePosition, resetPlayer] = usePlayer();
+  const [player, updatePosition, resetPlayer, rotate] = usePlayer();
   const [gameSpeed, setGameSpeed] = useState(1000);
   const [board, setBoard, rowsCleared] = useBoard(player, resetPlayer);
 
@@ -31,6 +31,8 @@ function Game() {
       drop();
     } else if (key === ' ') {
       dropMax();
+    } else if (key === 'w') {
+      rotate();
     }
   };
 
