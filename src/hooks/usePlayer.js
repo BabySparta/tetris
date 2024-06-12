@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { checkCollision, checkLoss } from "../utils/heplers";
+import { TETROMINOS, randomTetromino } from "../utils/tetrominos";
 
 export const usePlayer = () => {
   const [player, setPlayer] = useState({
     xPos: 5,
     yPos: 0,
+    tetromino: randomTetromino().shape,
   });
 
   const updatePosition = (x, y) => {
@@ -19,6 +20,7 @@ export const usePlayer = () => {
     setPlayer({
       xPos: 5,
       yPos: 0,
+      tetromino: randomTetromino().shape
     });
   }
 

@@ -23,12 +23,19 @@ export const useBoard = (player, resetPlayer) => {
       let newBoard = prevBoard.map((row) =>
         row.map((cell) => (cell[1] === "clear" ? [0, "clear"] : cell))
       );
-      newBoard[player.yPos][player.xPos] = [
-        1,
-        checkCollision(newBoard, player) ? "merged" : "clear",
-      ];
 
-      if (checkCollision(newBoard, player)) {
+      player.tetromino.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if(value !== 0) {
+            newBoard[y + player.yPos][x + player.xPos] = [
+              value,
+              checkCollision(newBoard, player, 0, 0) ? 'merged' : 'clear'
+            ]
+          }
+        })
+      })      
+
+      if (checkCollision(newBoard, player, 0, 0)) {
         newBoard = sweepRows(newBoard);
         if (checkLoss(newBoard)) {
           return newBoard;

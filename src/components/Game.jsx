@@ -11,7 +11,7 @@ function Game() {
   const [board, setBoard, rowsCleared] = useBoard(player, resetPlayer);
 
   const drop = () => {
-    if (checkCollision(board, player)) return;
+    if (checkCollision(board, player, 0, 1)) return;
     updatePosition(0, 1);
   };
 
@@ -24,9 +24,9 @@ function Game() {
   }
   const move = ({ key }) => {
     if (key === "a") {
-      if (!checkCollision(board, player, -1)) updatePosition(-1, 0);
+      if (!checkCollision(board, player, -1, 0)) updatePosition(-1, 0);
     } else if (key === "d") {
-      if (!checkCollision(board, player, 1)) updatePosition(1, 0);
+      if (!checkCollision(board, player, 1, 0)) updatePosition(1, 0);
     } else if (key === "s") {
       drop();
     } else if (key === ' ') {
