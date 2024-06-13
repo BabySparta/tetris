@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { TETROMINOS, randomTetromino } from "../utils/tetrominos";
+import { randomTetromino } from "../utils/tetrominos";
+import { checkCollision } from "../utils/heplers";
 
 export const usePlayer = () => {
   const [player, setPlayer] = useState({
@@ -8,7 +9,7 @@ export const usePlayer = () => {
     tetromino: randomTetromino().shape,
   });
 
-  const rotate = () => {
+  const rotate = (board) => {
     const clonedTetromino = player.tetromino.map(row => [...row]);
 
     // Transpose the matrix
@@ -20,7 +21,8 @@ export const usePlayer = () => {
   
     // Reverse the rows to get a rotated matrix
     clonedTetromino.forEach(row => row.reverse());
-  
+    if (checkCollision(board, { xPos: player.xPos, yPos: player.yPos, tetromino: clonedTetromino}, 0, 1)) return;
+
     setPlayer(prev => ({
       ...prev,
       tetromino: clonedTetromino
