@@ -1,12 +1,16 @@
 import './App.css'
-import Game from './components/Game'
+import Body from './UI/Body'
+import Footer from './UI/Footer'
+import Header from './UI/Header'
 
 function App() {
 
   return (
-    <>
-      <Game />
-    </>
+    <div className="app">
+      <Header />
+      <Body />
+      <Footer />
+    </div>
   )
 }
 
