@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useBoard } from "../hooks/useBoard";
 import Board from "./Board";
 import "../styles/game.css";
@@ -6,24 +6,45 @@ import { usePlayer } from "../hooks/usePlayer";
 import { checkCollision } from "../utils/heplers";
 
 function Game() {
-  const [player, updatePosition, resetPlayer, rotate] = usePlayer();
+  const [player, updatePosition, resetPlayer, rotate, setCollided] = usePlayer();
   const [gameSpeed, setGameSpeed] = useState(1000);
   const [board, setBoard, rowsCleared] = useBoard(player, resetPlayer);
 
-  const drop = () => {
-    if (checkCollision(board, player, 0, 1)) return;
-    updatePosition(0, 1);
-  };
+  // Use refs to keep track of the latest state
+  const playerRef = useRef(player);
+  const boardRef = useRef(board);
 
-  const dropMax = () => {
-    let maxSquaresToDrop = board.length;
-    for (let y = 0; y < player.tetromino.length; y++) {
-      for (let x = 0; x < player.tetromino[y].length; x++) {
-        if (player.tetromino[y][x] !== 0) {
+  useEffect(() => {
+    playerRef.current = player;
+  }, [player]);
+
+  useEffect(() => {
+    boardRef.current = board;
+  }, [board]);
+
+  const drop = useCallback(() => {
+    const currentBoard = boardRef.current;
+    const currentPlayer = playerRef.current;
+
+    if (checkCollision(currentBoard, currentPlayer, 0, 1)) {
+      setCollided();
+    } else {
+      updatePosition(0, 1);
+    }
+  }, [checkCollision]);
+
+  const dropMax = useCallback(() => {
+    const currentBoard = boardRef.current;
+    const currentPlayer = playerRef.current;
+    let maxSquaresToDrop = currentBoard.length;
+
+    for (let y = 0; y < currentPlayer.tetromino.length; y++) {
+      for (let x = 0; x < currentPlayer.tetromino[y].length; x++) {
+        if (currentPlayer.tetromino[y][x] !== 0) {
           let squaresToDrop = 0;
           while (
-            player.yPos + y + squaresToDrop + 1 < board.length &&
-            board[player.yPos + y + squaresToDrop + 1][player.xPos + x][1] === "clear"
+            currentPlayer.yPos + y + squaresToDrop + 1 < currentBoard.length &&
+            currentBoard[currentPlayer.yPos + y + squaresToDrop + 1][currentPlayer.xPos + x][1] === "clear"
           ) {
             squaresToDrop++;
           }
@@ -33,23 +54,27 @@ function Game() {
         }
       }
     }
+
     updatePosition(0, maxSquaresToDrop);
-  };
-  
-  const move = ({ key }) => {
+    setCollided();
+  }, [updatePosition, setCollided]);
+
+  const move = useCallback(({ key }) => {
+    const currentBoard = boardRef.current;
+    const currentPlayer = playerRef.current;
+
     if (key === "a") {
-      if (!checkCollision(board, player, -1, 0)) updatePosition(-1, 0);
+      if (!checkCollision(currentBoard, currentPlayer, -1, 0)) updatePosition(-1, 0);
     } else if (key === "d") {
-      if (!checkCollision(board, player, 1, 0)) updatePosition(1, 0);
+      if (!checkCollision(currentBoard, currentPlayer, 1, 0)) updatePosition(1, 0);
     } else if (key === "s") {
-      drop();
+      if (!checkCollision(currentBoard, currentPlayer, 0, 1)) updatePosition(0, 1);
     } else if (key === ' ') {
       dropMax();
     } else if (key === 'w') {
-      rotate(board);
+      rotate(currentBoard);
     }
-  };
-
+  }, [updatePosition, dropMax, rotate]);
 
   useEffect(() => {
     document.addEventListener("keydown", move);

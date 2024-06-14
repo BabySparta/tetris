@@ -7,6 +7,7 @@ export const usePlayer = () => {
     xPos: 5,
     yPos: 0,
     tetromino: randomTetromino().shape,
+    collided: false
   });
 
   const rotate = (board) => {
@@ -41,9 +42,17 @@ export const usePlayer = () => {
     setPlayer({
       xPos: 5,
       yPos: 0,
-      tetromino: randomTetromino().shape
+      tetromino: randomTetromino().shape,
+      collided: false
     });
   }
 
-  return [player, updatePosition, resetPlayer, rotate];
+  const setCollided = () => {
+    setPlayer(prev => ({
+      ...prev,
+      collided: true
+    }))
+  }
+
+  return [player, updatePosition, resetPlayer, rotate, setCollided];
 };
