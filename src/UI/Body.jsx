@@ -1,4 +1,5 @@
 import Game from "../components/Game";
+import "../styles/Body.css"
 
 function Body() {
   return (

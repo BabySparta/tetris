@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'Caveman';
+  src: url("../assets/CAVEMAN_.TTF") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.header {
+  height: 10vh;
+  background-color: tan;
+  display: flex;
+  place-content: center;
+}
+
+.title {
+  font-family: 'Caveman', sans-serif;
+  font-size: 8vh;
+  color: black;
+  width: fit-content;
+}
