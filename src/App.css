@@ -3,4 +3,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background-image: url("./assets/cavemantetrisbackground.png");
+  background-size: 100vw;
+  background-position: 1px -65vh
 }
