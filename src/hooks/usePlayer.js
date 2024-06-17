@@ -9,6 +9,7 @@ export const usePlayer = () => {
     tetromino: randomTetromino().shape,
     collided: false
   });
+  const [nextTetromino, setNextTetromino] = useState(randomTetromino().shape);
 
   const rotate = (board) => {
     const clonedTetromino = player.tetromino.map(row => [...row]);
@@ -42,9 +43,10 @@ export const usePlayer = () => {
     setPlayer({
       xPos: 5,
       yPos: 0,
-      tetromino: randomTetromino().shape,
+      tetromino: nextTetromino,
       collided: false
     });
+    setNextTetromino(randomTetromino().shape);
   }
 
   const setCollided = () => {
@@ -54,5 +56,5 @@ export const usePlayer = () => {
     }))
   }
 
-  return [player, updatePosition, resetPlayer, rotate, setCollided];
+  return [player, nextTetromino, updatePosition, resetPlayer, rotate, setCollided];
 };

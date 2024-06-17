@@ -4,9 +4,10 @@ import Board from "./Board";
 import "../styles/game.css";
 import { usePlayer } from "../hooks/usePlayer";
 import { checkCollision } from "../utils/heplers";
+import NextPiece from "./NextPiece";
 
 function Game() {
-  const [player, updatePosition, resetPlayer, rotate, setCollided] = usePlayer();
+  const [player, nextPiece, updatePosition, resetPlayer, rotate, setCollided] = usePlayer();
   const [gameSpeed, setGameSpeed] = useState(1000);
   const [board, setBoard, rowsCleared] = useBoard(player, resetPlayer);
 
@@ -89,7 +90,14 @@ function Game() {
     return () => clearInterval(dropInterval);
   }, [drop, gameSpeed]);
 
-  return <Board board={board} />;
+  return (
+  <div className="game">
+    <Board board={board} />
+    <div className="sidebar">
+        <NextPiece nextPiece={nextPiece}/>
+      </div>
+  </div>
+);
 }
 
 export default Game;

@@ -6,9 +6,6 @@ function Body() {
   return (
     <div className="body">
       <Game />
-      <div className="sidebar">
-        <NextPiece />
-      </div>
     </div>
   )
 }
