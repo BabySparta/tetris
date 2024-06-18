@@ -5,6 +5,7 @@ import "../styles/game.css";
 import { usePlayer } from "../hooks/usePlayer";
 import { checkCollision } from "../utils/heplers";
 import NextPiece from "./NextPiece";
+import Sidebar from "../UI/Sidebar";
 
 function Game() {
   const [player, nextPiece, updatePosition, resetPlayer, rotate, setCollided] = usePlayer();
@@ -93,9 +94,7 @@ function Game() {
   return (
   <div className="game">
     <Board board={board} />
-    <div className="sidebar">
-        <NextPiece nextPiece={nextPiece}/>
-      </div>
+    <Sidebar nextPiece={nextPiece}/>
   </div>
 );
 }

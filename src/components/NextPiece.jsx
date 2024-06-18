@@ -14,7 +14,7 @@ function NextPiece({ nextPiece }) {
       }
       for (let row = 0; row < nextPiece.length; row++) {
         for (let col = 0; col < nextPiece[row].length; col++) {
-          baseArray[row + 1][col + 1] = nextPiece[row][col]
+          baseArray[col + 1][row + 1] = nextPiece[row][col]
         }
       }
       return baseArray;
