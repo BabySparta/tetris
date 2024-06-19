@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "../styles/NextPiece.css";
 
 function NextPiece({ nextPiece }) {
   const [displayPiece, setDisplayPiece] = useState(new Array(4).fill(new Array(4).fill(0)))

@@ -4,7 +4,6 @@ import Board from "./Board";
 import "../styles/game.css";
 import { usePlayer } from "../hooks/usePlayer";
 import { checkCollision } from "../utils/heplers";
-import NextPiece from "./NextPiece";
 import Sidebar from "../UI/Sidebar";
 
 function Game() {
@@ -12,9 +11,9 @@ function Game() {
   const [gameSpeed, setGameSpeed] = useState(1000);
   const [board, setBoard, rowsCleared] = useBoard(player, resetPlayer);
 
-  // Use refs to keep track of the latest state
   const playerRef = useRef(player);
   const boardRef = useRef(board);
+  const isDropping = useRef(false);
 
   useEffect(() => {
     playerRef.current = player;
@@ -25,6 +24,12 @@ function Game() {
   }, [board]);
 
   const drop = useCallback(() => {
+    if (isDropping.current) {
+      console.log(true);
+      return;
+    }
+    isDropping.current = true
+
     const currentBoard = boardRef.current;
     const currentPlayer = playerRef.current;
 
@@ -33,7 +38,8 @@ function Game() {
     } else {
       updatePosition(0, 1);
     }
-  }, [checkCollision]);
+    isDropping.current = false
+  }, []);
 
   const dropMax = useCallback(() => {
     const currentBoard = boardRef.current;
@@ -62,6 +68,11 @@ function Game() {
   }, [updatePosition, setCollided]);
 
   const move = useCallback(({ key }) => {
+    if (isDropping.current) {
+      return;
+    }
+    isDropping.current = true
+
     const currentBoard = boardRef.current;
     const currentPlayer = playerRef.current;
 
@@ -76,7 +87,16 @@ function Game() {
     } else if (key === 'w') {
       rotate(currentBoard);
     }
+    isDropping.current = false;
   }, [updatePosition, dropMax, rotate]);
+
+  
+  useEffect(() => {
+    const calculateGameSpeed = () => {
+      return 1000 * Math.pow(0.9, Math.floor(rowsCleared));
+    };
+    setGameSpeed(prevSpeed => calculateGameSpeed(prevSpeed));
+  }, [rowsCleared]);
 
   useEffect(() => {
     document.addEventListener("keydown", move);
@@ -92,11 +112,11 @@ function Game() {
   }, [drop, gameSpeed]);
 
   return (
-  <div className="game">
-    <Board board={board} />
-    <Sidebar nextPiece={nextPiece}/>
-  </div>
-);
+    <div className="game">
+      <Board board={board} />
+      <Sidebar nextPiece={nextPiece} rowsCleared={rowsCleared} />
+    </div>
+  );
 }
 
 export default Game;

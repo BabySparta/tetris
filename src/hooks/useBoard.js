@@ -6,9 +6,7 @@ export const useBoard = (player, resetPlayer) => {
   const [rowsCleared, setRowsCleared] = useState(0);
 
   useEffect(() => {
-    setRowsCleared(0);
-
-    const sweepRows = (newBoard) =>
+      const sweepRows = (newBoard) =>
       newBoard.reduce((acc, row) => {
         if (row.findIndex((cell) => cell[0] === 0) === -1) {
           setRowsCleared((prev) => prev + 1);
@@ -38,7 +36,8 @@ export const useBoard = (player, resetPlayer) => {
       if (player.collided) {
         newBoard = sweepRows(newBoard);
         if (checkLoss(newBoard)) {
-          return newBoard;
+          resetPlayer();
+          return createBoard();
         }
         resetPlayer();
       }
