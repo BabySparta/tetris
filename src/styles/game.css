@@ -3,6 +3,12 @@
   gap: 20px;
 }
 
+.boardWrap {
+  position: relative;
+  height: fit-content;
+  width: fit-content;
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);

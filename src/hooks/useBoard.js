@@ -29,7 +29,6 @@ export const useBoard = (player, resetPlayer) => {
       player.tetromino.forEach((row, y) => {
         row.forEach((value, x) => {
           if(value !== 0) {
-            console.log(y + player.yPos, x + player.xPos)
             newBoard[y + player.yPos][x + player.xPos] = [
               value,
               player.collided ? 'merged' : 'clear'
@@ -41,8 +40,7 @@ export const useBoard = (player, resetPlayer) => {
       if (player.collided) {
         newBoard = sweepRows(newBoard);
         if (checkLoss(newBoard)) {
-          resetPlayer();
-          return createBoard();
+          return newBoard
         }
         resetPlayer();
       }
@@ -52,5 +50,5 @@ export const useBoard = (player, resetPlayer) => {
     setBoard((prev) => updateBoard(prev));
   }, [player]);
 
-  return [board, setBoard, rowsCleared, totalRowsCleared];
+  return [board, setBoard, rowsCleared, setRowsCleared, totalRowsCleared, setTotalRowsCleared];
 };

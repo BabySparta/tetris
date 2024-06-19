@@ -18,18 +18,10 @@ export const checkCollision = (board, player, xDir, yDir) => {
 }
 
 export const checkLoss = (board) => {
-  if (!checkIfEmpty(board[0])) {
-    return true;
+  for (let x = 0; x < board[0].length; x++) {
+      if (board[0][x][1] !== "clear") {
+          return true;
+      }
   }
   return false;
-}
-
-const checkIfEmpty = (row) => {
-  let empty = true
-  row.forEach(cell => {
-    if (cell[1] === 'merged') {
-      empty = false;
-    }
-  })
-  return empty;
-}
+};

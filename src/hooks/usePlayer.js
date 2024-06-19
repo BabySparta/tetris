@@ -48,10 +48,12 @@ export const usePlayer = () => {
   };
 
   const setCollided = () => {
-    setPlayer(prev => ({
-      ...prev,
-      collided: true
-    }));
+    setPlayer(prev => {
+      return {
+        ...prev,
+        collided: true
+      };
+    });
   };
 
   return [player, nextTetromino, updatePosition, resetPlayer, rotate, setCollided, setPlayer];

@@ -2,6 +2,7 @@ import NextPiece from "../components/NextPiece";
 import "../styles/Sidebar.css"
 import meatIcon from "../assets/meat.png"
 import { useEffect, useState } from "react";
+import ClubSmash from "../components/ClubSmash";
 
 function Sidebar({ nextPiece, rowsCleared, totalRowsCleared }) {
   const [money, setMoney] = useState(0);
@@ -29,6 +30,9 @@ function Sidebar({ nextPiece, rowsCleared, totalRowsCleared }) {
       <div className="moneyWrap">
         <img src={meatIcon} alt="meat" className="meatIcon"/>
         <div className="moneyVal">{money}</div>
+      </div>
+      <div className="powerWrap">
+        <ClubSmash />
       </div>
     </div>
   )

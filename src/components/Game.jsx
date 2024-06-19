@@ -3,13 +3,14 @@ import { useBoard } from "../hooks/useBoard";
 import Board from "./Board";
 import "../styles/game.css";
 import { usePlayer } from "../hooks/usePlayer";
-import { checkCollision } from "../utils/heplers";
+import { checkCollision, checkLoss, createBoard } from "../utils/heplers";
 import Sidebar from "../UI/Sidebar";
 
 function Game() {
   const [player, nextPiece, updatePosition, resetPlayer, rotate, setCollided, setPlayer] = usePlayer();
   const [gameSpeed, setGameSpeed] = useState(1000);
-  const [board, setBoard, rowsCleared, totalRowsCleared] = useBoard(player, resetPlayer);
+  const [board, setBoard, rowsCleared, setRowsCleared, totalRowsCleared, setTotalRowsCleared] = useBoard(player, resetPlayer);
+  const [gameOver, setGameOver] = useState(false);
 
   const playerRef = useRef(player);
   const boardRef = useRef(board);
@@ -22,6 +23,12 @@ function Game() {
   useEffect(() => {
     boardRef.current = board;
   }, [board]);
+
+  useEffect(() => {
+    if(checkLoss(boardRef.current)) {
+      setGameOver(true);
+    }
+  }, [board])
 
   const drop = useCallback(() => {
     if (isDropping.current) {
@@ -70,33 +77,33 @@ function Game() {
     setCollided();
   }, [updatePosition, setCollided]);
 
-  const move = useCallback(({ key }) => {
-    if (isDropping.current) {
-      return;
+  const move = useCallback((event) => {
+    const { key } = event;
+    if (isDropping.current || gameOver) {
+        return;
     }
-    isDropping.current = true
+    isDropping.current = true;
 
     const currentBoard = boardRef.current;
     const currentPlayer = playerRef.current;
 
     if (key === "a") {
-      if (!checkCollision(currentBoard, currentPlayer, -1, 0)) updatePosition(-1, 0);
+        if (!checkCollision(currentBoard, currentPlayer, -1, 0)) updatePosition(-1, 0);
     } else if (key === "d") {
-      if (!checkCollision(currentBoard, currentPlayer, 1, 0)) updatePosition(1, 0);
+        if (!checkCollision(currentBoard, currentPlayer, 1, 0)) updatePosition(1, 0);
     } else if (key === "s") {
-      if (!checkCollision(currentBoard, currentPlayer, 0, 1)) {
-        setPlayer(prev => ({
-          ...prev,
-          yPos: currentPlayer.yPos + 1
-        }))
-      }
+        if (!checkCollision(currentBoard, currentPlayer, 0, 1)) {
+            updatePosition(0, 1);
+        }
     } else if (key === ' ') {
-      dropMax();
+        event.preventDefault();
+        dropMax();
     } else if (key === 'w') {
-      rotate(currentBoard);
+        rotate(currentBoard);
     }
     isDropping.current = false;
-  }, [updatePosition, dropMax, rotate]);
+}, [updatePosition, dropMax, rotate, gameOver]);
+
 
   
   useEffect(() => {
@@ -112,16 +119,28 @@ function Game() {
   }, [move]);
 
   useEffect(() => {
+    if(gameOver) return;
+    
     const dropInterval = setInterval(() => {
       drop();
     }, gameSpeed);
 
     return () => clearInterval(dropInterval);
-  }, [move, drop, gameSpeed]);
+  }, [drop, gameSpeed, gameOver]);
+
+  const resetGame = () => {
+    console.log('hi')
+    setBoard(createBoard());
+    resetPlayer();
+    setRowsCleared(0);
+    setTotalRowsCleared(0);
+    setGameOver(false);
+    setGameSpeed(1000);
+  }
 
   return (
     <div className="game">
-      <Board board={board} />
+      <Board board={board} gameOver={gameOver} resetGame={resetGame}/>
       <Sidebar nextPiece={nextPiece} rowsCleared={rowsCleared} totalRowsCleared={totalRowsCleared} />
     </div>
   );
