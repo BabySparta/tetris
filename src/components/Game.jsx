@@ -7,9 +7,9 @@ import { checkCollision } from "../utils/heplers";
 import Sidebar from "../UI/Sidebar";
 
 function Game() {
-  const [player, nextPiece, updatePosition, resetPlayer, rotate, setCollided] = usePlayer();
+  const [player, nextPiece, updatePosition, resetPlayer, rotate, setCollided, setPlayer] = usePlayer();
   const [gameSpeed, setGameSpeed] = useState(1000);
-  const [board, setBoard, rowsCleared] = useBoard(player, resetPlayer);
+  const [board, setBoard, rowsCleared, totalRowsCleared] = useBoard(player, resetPlayer);
 
   const playerRef = useRef(player);
   const boardRef = useRef(board);
@@ -25,7 +25,6 @@ function Game() {
 
   const drop = useCallback(() => {
     if (isDropping.current) {
-      console.log(true);
       return;
     }
     isDropping.current = true
@@ -41,7 +40,7 @@ function Game() {
     isDropping.current = false
   }, []);
 
-  const dropMax = useCallback(() => {
+  const dropMax = useCallback(() => {   
     const currentBoard = boardRef.current;
     const currentPlayer = playerRef.current;
     let maxSquaresToDrop = currentBoard.length;
@@ -51,7 +50,7 @@ function Game() {
         if (currentPlayer.tetromino[y][x] !== 0) {
           let squaresToDrop = 0;
           while (
-            currentPlayer.yPos + y + squaresToDrop + 1 < currentBoard.length &&
+            currentBoard[currentPlayer.yPos + y + squaresToDrop + 1] &&
             currentBoard[currentPlayer.yPos + y + squaresToDrop + 1][currentPlayer.xPos + x][1] === "clear"
           ) {
             squaresToDrop++;
@@ -63,7 +62,11 @@ function Game() {
       }
     }
 
-    updatePosition(0, maxSquaresToDrop);
+    setPlayer(prev => ({
+      ...prev,
+      yPos: currentPlayer.yPos + maxSquaresToDrop,
+    }))
+
     setCollided();
   }, [updatePosition, setCollided]);
 
@@ -81,7 +84,12 @@ function Game() {
     } else if (key === "d") {
       if (!checkCollision(currentBoard, currentPlayer, 1, 0)) updatePosition(1, 0);
     } else if (key === "s") {
-      if (!checkCollision(currentBoard, currentPlayer, 0, 1)) updatePosition(0, 1);
+      if (!checkCollision(currentBoard, currentPlayer, 0, 1)) {
+        setPlayer(prev => ({
+          ...prev,
+          yPos: currentPlayer.yPos + 1
+        }))
+      }
     } else if (key === ' ') {
       dropMax();
     } else if (key === 'w') {
@@ -93,10 +101,10 @@ function Game() {
   
   useEffect(() => {
     const calculateGameSpeed = () => {
-      return 1000 * Math.pow(0.9, Math.floor(rowsCleared));
+      return 1000 * Math.pow(0.9, Math.floor(totalRowsCleared/10));
     };
     setGameSpeed(prevSpeed => calculateGameSpeed(prevSpeed));
-  }, [rowsCleared]);
+  }, [totalRowsCleared]);
 
   useEffect(() => {
     document.addEventListener("keydown", move);
@@ -109,12 +117,12 @@ function Game() {
     }, gameSpeed);
 
     return () => clearInterval(dropInterval);
-  }, [drop, gameSpeed]);
+  }, [move, drop, gameSpeed]);
 
   return (
     <div className="game">
       <Board board={board} />
-      <Sidebar nextPiece={nextPiece} rowsCleared={rowsCleared} />
+      <Sidebar nextPiece={nextPiece} rowsCleared={rowsCleared} totalRowsCleared={totalRowsCleared} />
     </div>
   );
 }

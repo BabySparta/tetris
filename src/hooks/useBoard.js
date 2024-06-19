@@ -4,18 +4,22 @@ import { checkCollision, checkLoss, createBoard } from "../utils/heplers";
 export const useBoard = (player, resetPlayer) => {
   const [board, setBoard] = useState(createBoard());
   const [rowsCleared, setRowsCleared] = useState(0);
+  const [totalRowsCleared, setTotalRowsCleared] = useState(0);
 
   useEffect(() => {
-      const sweepRows = (newBoard) =>
-      newBoard.reduce((acc, row) => {
-        if (row.findIndex((cell) => cell[0] === 0) === -1) {
-          setRowsCleared((prev) => prev + 1);
-          acc.unshift(new Array(newBoard[0].length).fill([0, "clear"]));
-          return acc;
-        }
-        acc.push(row);
+    setRowsCleared(0);
+
+    const sweepRows = (newBoard) =>
+    newBoard.reduce((acc, row) => {
+      if (row.findIndex((cell) => cell[0] === 0) === -1) {
+        setRowsCleared((prev) => prev + 1);
+        setTotalRowsCleared((prev) => prev + 1);
+        acc.unshift(new Array(newBoard[0].length).fill([0, "clear"]));
         return acc;
-      }, []);
+      }
+      acc.push(row);
+      return acc;
+    }, []);
 
     const updateBoard = (prevBoard) => {
       let newBoard = prevBoard.map((row) =>
@@ -25,6 +29,7 @@ export const useBoard = (player, resetPlayer) => {
       player.tetromino.forEach((row, y) => {
         row.forEach((value, x) => {
           if(value !== 0) {
+            console.log(y + player.yPos, x + player.xPos)
             newBoard[y + player.yPos][x + player.xPos] = [
               value,
               player.collided ? 'merged' : 'clear'
@@ -47,5 +52,5 @@ export const useBoard = (player, resetPlayer) => {
     setBoard((prev) => updateBoard(prev));
   }, [player]);
 
-  return [board, setBoard, rowsCleared];
+  return [board, setBoard, rowsCleared, totalRowsCleared];
 };

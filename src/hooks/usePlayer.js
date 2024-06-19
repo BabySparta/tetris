@@ -25,7 +25,7 @@ export const usePlayer = () => {
 
     setPlayer(prev => ({
       ...prev,
-      tetromino: clonedTetromino
+      tetromino: clonedTetromino  
     }));
   };
 
@@ -54,5 +54,5 @@ export const usePlayer = () => {
     }));
   };
 
-  return [player, nextTetromino, updatePosition, resetPlayer, rotate, setCollided];
+  return [player, nextTetromino, updatePosition, resetPlayer, rotate, setCollided, setPlayer];
 };
