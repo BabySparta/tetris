@@ -56,3 +56,37 @@
   box-sizing: border-box;
   outline: solid rgb(61, 61, 61) 1px;
 }
+
+.powerUpButton {
+  background-color: tan;
+  border: 3px solid rgb(97, 63, 0);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: ease-in-out 0.2s;
+}
+
+.powerUpButton:hover {
+  border: 3px solid red;
+  transform: scale(1.02);
+}
+
+.clubIcon {
+  width: 64px;
+}
+
+.costWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.meatCost {
+  width: 24px;
+}
+
+.costText {
+  font-family: PaintSubFont, sans-serif;
+}

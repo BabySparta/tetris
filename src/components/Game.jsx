@@ -11,6 +11,7 @@ function Game() {
   const [gameSpeed, setGameSpeed] = useState(1000);
   const [board, setBoard, rowsCleared, setRowsCleared, totalRowsCleared, setTotalRowsCleared] = useBoard(player, resetPlayer);
   const [gameOver, setGameOver] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const playerRef = useRef(player);
   const boardRef = useRef(board);
@@ -79,7 +80,7 @@ function Game() {
 
   const move = useCallback((event) => {
     const { key } = event;
-    if (isDropping.current || gameOver) {
+    if (isDropping.current || gameOver || isPaused) {
         return;
     }
     isDropping.current = true;
@@ -119,17 +120,42 @@ function Game() {
   }, [move]);
 
   useEffect(() => {
-    if(gameOver) return;
+    if (!isPaused) {
+      document.addEventListener("keydown", move);
+    } else {
+      document.removeEventListener("keydown", move);
+    }
+    return () => document.removeEventListener("keydown", move);
+  }, [move, isPaused]);
+
+  useEffect(() => {
+    if(gameOver || isPaused) return;
     
     const dropInterval = setInterval(() => {
       drop();
     }, gameSpeed);
 
     return () => clearInterval(dropInterval);
-  }, [drop, gameSpeed, gameOver]);
+  }, [drop, gameSpeed, gameOver, isPaused]);
+
+  const togglePause = () => {
+    setIsPaused(prev => !prev);
+  };
+
+  const handleClubSmash = (x, y) => {
+    if (!isPaused) return;
+
+    const newBoard = board.map((row, rowIndex) => 
+      row.map((cell, colIndex) => 
+        (rowIndex >= y && rowIndex < y + 3 && colIndex >= x && colIndex < x + 3) ? [0, "clear"] : cell
+      )
+    );
+
+    setBoard(newBoard);
+    togglePause();
+  };
 
   const resetGame = () => {
-    console.log('hi')
     setBoard(createBoard());
     resetPlayer();
     setRowsCleared(0);

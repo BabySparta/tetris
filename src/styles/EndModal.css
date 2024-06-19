@@ -29,8 +29,9 @@
 .youLost {
   font-family: PaintSubfont, sans-serif;
   color: rgb(255, 102, 102);
-  font-size: 32px;
+  font-size: 28px;
   text-align: center;
+  text-wrap: always;
 }
 
 .newGame {
