@@ -1,7 +1,7 @@
 
-function Cell({ type }) {
+function Cell({ type, onClick }) {
   return (
-    <div className="cell" id={type}></div>
+    <div className="cell" id={type} onClick={onClick}></div>
   )
 }
 

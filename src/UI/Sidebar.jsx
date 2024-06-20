@@ -4,24 +4,7 @@ import meatIcon from "../assets/meat.png"
 import { useEffect, useState } from "react";
 import ClubSmash from "../components/ClubSmash";
 
-function Sidebar({ nextPiece, rowsCleared, totalRowsCleared }) {
-  const [money, setMoney] = useState(0);
-
-  useEffect(() => {
-    const calculateMoneyEarned = () => {
-      if (rowsCleared/2 === 4) {
-        return rowsCleared * 2
-      } else if (rowsCleared/2 === 3) {
-        return rowsCleared * 1.5
-      } else if (rowsCleared/2 === 2) {
-        return rowsCleared * 1.25
-      } else {
-        return rowsCleared
-      }
-    }
-
-    setMoney((prev) => prev + calculateMoneyEarned());
-  }, [rowsCleared])
+function Sidebar({ nextPiece, money, totalRowsCleared, clubSmash }) {
   
   return (
     <div className="sidebar">
@@ -32,7 +15,7 @@ function Sidebar({ nextPiece, rowsCleared, totalRowsCleared }) {
         <div className="moneyVal">{money}</div>
       </div>
       <div className="powerWrap">
-        <ClubSmash />
+        <ClubSmash clubSmash={clubSmash}/>
       </div>
     </div>
   )

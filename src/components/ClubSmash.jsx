@@ -1,9 +1,9 @@
 import club from "../assets/club.png"
 import meat from "../assets/meat.png"
 
-function ClubSmash() {
+function ClubSmash({ clubSmash }) {
   return (
-    <button className="powerUpButton">
+    <button className="powerUpButton" onClick={clubSmash}>
       <img src={club} alt="club smash" className="clubIcon" />
       <div className="costWrap">
         <img src={meat} alt="cost" className="meatCost" />

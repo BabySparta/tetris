@@ -12,6 +12,8 @@ function Game() {
   const [board, setBoard, rowsCleared, setRowsCleared, totalRowsCleared, setTotalRowsCleared] = useBoard(player, resetPlayer);
   const [gameOver, setGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [money, setMoney] = useState(0);
+  const [isClubSmashActive, setIsClubSmashActive] = useState(false);
 
   const playerRef = useRef(player);
   const boardRef = useRef(board);
@@ -40,7 +42,7 @@ function Game() {
     const currentBoard = boardRef.current;
     const currentPlayer = playerRef.current;
 
-    if (checkCollision(currentBoard, currentPlayer, 0, 1)) {
+    if (checkCollision(currentBoard, currentPlayer, 0, 1) && !currentPlayer.collided) {
       setCollided();
     } else {
       updatePosition(0, 1);
@@ -73,10 +75,10 @@ function Game() {
     setPlayer(prev => ({
       ...prev,
       yPos: currentPlayer.yPos + maxSquaresToDrop,
+      collided: true,
     }))
 
-    setCollided();
-  }, [updatePosition, setCollided]);
+  }, [updatePosition]);
 
   const move = useCallback((event) => {
     const { key } = event;
@@ -138,21 +140,54 @@ function Game() {
     return () => clearInterval(dropInterval);
   }, [drop, gameSpeed, gameOver, isPaused]);
 
+  useEffect(() => {
+    const calculateMoneyEarned = () => {
+      if (rowsCleared/2 === 4) {
+        return rowsCleared * 2
+      } else if (rowsCleared/2 === 3) {
+        return rowsCleared * 1.5
+      } else if (rowsCleared/2 === 2) {
+        return rowsCleared * 1.25
+      } else {
+        return rowsCleared
+      }
+    }
+
+    setMoney((prev) => prev + calculateMoneyEarned());
+  }, [rowsCleared])
+
   const togglePause = () => {
     setIsPaused(prev => !prev);
   };
 
-  const handleClubSmash = (x, y) => {
-    if (!isPaused) return;
+  const activateClubSmash = () => {
+    if (money >= 10) {
+      setIsClubSmashActive(true);
+      togglePause();
+    }
+      
+  };
 
+  const clubSmash = (x, y) => {
     const newBoard = board.map((row, rowIndex) => 
       row.map((cell, colIndex) => 
-        (rowIndex >= y && rowIndex < y + 3 && colIndex >= x && colIndex < x + 3) ? [0, "clear"] : cell
+        (rowIndex >= y - 1 && rowIndex <= y + 1 && colIndex >= x - 1 && colIndex <= x + 1) 
+          ? [0, "clear"] 
+          : cell
       )
     );
-
+  
     setBoard(newBoard);
-    togglePause();
+    setMoney(prev => prev - 10);
+  };
+  
+
+  const handleTileClick = (x, y) => {
+    if (isClubSmashActive) {
+      clubSmash(x, y);
+      setIsClubSmashActive(false);
+      togglePause();
+    }
   };
 
   const resetGame = () => {
@@ -162,12 +197,13 @@ function Game() {
     setTotalRowsCleared(0);
     setGameOver(false);
     setGameSpeed(1000);
+    setMoney(0);
   }
 
   return (
     <div className="game">
-      <Board board={board} gameOver={gameOver} resetGame={resetGame}/>
-      <Sidebar nextPiece={nextPiece} rowsCleared={rowsCleared} totalRowsCleared={totalRowsCleared} />
+      <Board board={board} gameOver={gameOver} resetGame={resetGame} handleTileClick={handleTileClick}/>
+      <Sidebar nextPiece={nextPiece} money={money} totalRowsCleared={totalRowsCleared} clubSmash={activateClubSmash}/>
     </div>
   );
 }

@@ -20,6 +20,7 @@ export const checkCollision = (board, player, xDir, yDir) => {
 export const checkLoss = (board) => {
   for (let x = 0; x < board[0].length; x++) {
       if (board[0][x][1] !== "clear") {
+          console.log(board[0])
           return true;
       }
   }
