@@ -142,7 +142,7 @@ function Game() {
 
   useEffect(() => {
     const calculateMoneyEarned = () => {
-      if (rowsCleared/2 === 4) {
+      if (rowsCleared/2 >= 4) {
         return rowsCleared * 2
       } else if (rowsCleared/2 === 3) {
         return rowsCleared * 1.5
@@ -155,6 +155,14 @@ function Game() {
 
     setMoney((prev) => prev + calculateMoneyEarned());
   }, [rowsCleared])
+
+  useEffect(() => {
+    if (!isClubSmashActive) {
+      document.querySelectorAll('.highlight').forEach(cell => {
+        cell.classList.remove('highlight');
+      });
+    }
+  }, [isClubSmashActive]);
 
   const togglePause = () => {
     setIsPaused(prev => !prev);
@@ -179,14 +187,42 @@ function Game() {
   
     setBoard(newBoard);
     setMoney(prev => prev - 10);
-  };
-  
+  };  
 
   const handleTileClick = (x, y) => {
     if (isClubSmashActive) {
       clubSmash(x, y);
       setIsClubSmashActive(false);
       togglePause();
+    }
+  };
+
+  const dinoRoar = () => {
+    const newBoard = board.map(row => row.slice()); 
+  
+    for (let col = 0; col < newBoard[0].length; col++) {
+      let nonClearCells = [];
+      for (let row = 0; row < newBoard.length; row++) {
+        if (newBoard[row][col][0] !== 0) {
+          nonClearCells.push(newBoard[row][col]);
+        }
+      }
+      for (let row = newBoard.length - 1; row >= 0; row--) {
+        if (nonClearCells.length > 0) {
+          newBoard[row][col] = nonClearCells.pop();
+        } else {
+          newBoard[row][col] = [0, "clear"];
+        }
+      }
+    }
+  
+    setBoard(newBoard);
+  };
+  
+  const triggerDinoRoar = () => {
+    if (money >= 20) {
+      dinoRoar();
+      setMoney(prev => prev - 20); 
     }
   };
 
@@ -202,8 +238,8 @@ function Game() {
 
   return (
     <div className="game">
-      <Board board={board} gameOver={gameOver} resetGame={resetGame} handleTileClick={handleTileClick}/>
-      <Sidebar nextPiece={nextPiece} money={money} totalRowsCleared={totalRowsCleared} clubSmash={activateClubSmash}/>
+      <Board board={board} gameOver={gameOver} resetGame={resetGame} handleTileClick={handleTileClick} isClubSmashActive={isClubSmashActive}/>
+      <Sidebar nextPiece={nextPiece} money={money} totalRowsCleared={totalRowsCleared} clubSmash={activateClubSmash} dinoRoar={triggerDinoRoar}/>
     </div>
   );
 }

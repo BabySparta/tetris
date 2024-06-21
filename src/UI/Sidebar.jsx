@@ -1,10 +1,10 @@
 import NextPiece from "../components/NextPiece";
 import "../styles/Sidebar.css"
 import meatIcon from "../assets/meat.png"
-import { useEffect, useState } from "react";
 import ClubSmash from "../components/ClubSmash";
+import DinoRoar from "../components/DinoRoar";
 
-function Sidebar({ nextPiece, money, totalRowsCleared, clubSmash }) {
+function Sidebar({ nextPiece, money, totalRowsCleared, clubSmash, dinoRoar }) {
   
   return (
     <div className="sidebar">
@@ -16,6 +16,7 @@ function Sidebar({ nextPiece, money, totalRowsCleared, clubSmash }) {
       </div>
       <div className="powerWrap">
         <ClubSmash clubSmash={clubSmash}/>
+        <DinoRoar dinoRoar={dinoRoar}/>
       </div>
     </div>
   )

@@ -25,34 +25,50 @@
   box-sizing: border-box;
 }
 
-#fill {
-  background-color: green;
+.cell.highlight, #I.highlight, #J.highlight, #L.highlight, #O.highlight, #S.highlight, #T.highlight, #Z.highlight {
+  border: 2px solid rgb(31, 194, 31);
+  z-index: 2;
+  border-radius: 4px;
+}
+
+#I, #J, #L, #O, #S, #T, #Z {
+  border: 2px solid #555;
+  border-radius: 4px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  background-size: 500%;
 }
 
 #I {
+  background-image: url("../assets/rock-texture-1.png");
   background-color: rgb(80, 227, 230);
 }
 
 #J {
+  background-image: url("../assets/rock-texture-2.png");
   background-color: rgb(36, 95, 223);
 }
 
 #L {
+  background-image: url("../assets/rock-texture-3.png");
   background-color: rgb(223, 173, 36);
 }
 
 #O {
+  background-image: url("../assets/rock-texture-4.png");
   background-color: rgb(223, 217, 36);
 }
 
 #S {
+  background-image: url("../assets/rock-texture-5.png");
   background-color: rgb(48, 211, 56);
 }
 
 #T {
+  background-image: url("../assets/rock-texture-6.png");
   background-color: rgb(132, 61, 198);
 }
 
 #Z {
+  background-image: url("../assets/rock-texture-7.png");
   background-color: rgb(227, 78, 78);
 }
