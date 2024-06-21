@@ -137,7 +137,7 @@ function Game() {
 
   useEffect(() => {
     const calculateGameSpeed = () => {
-      return 1000 * Math.pow(0.9, Math.floor(totalRowsCleared / 10));
+      return 1000 * Math.pow(0.8, Math.floor(totalRowsCleared / 10));
     };
     setGameSpeed((prevSpeed) => calculateGameSpeed(prevSpeed));
   }, [totalRowsCleared]);
@@ -238,6 +238,7 @@ function Game() {
   };
 
   const dinoRoar = () => {
+    togglePause();
     setIsDinoRoarActive(true);
 
     setTimeout(() => {
@@ -258,6 +259,7 @@ function Game() {
             newBoard[row][col] = [0, "clear"];
           }
         }
+        togglePause();
       }
 
       setBoard(newBoard);
