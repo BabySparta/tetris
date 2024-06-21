@@ -7,7 +7,7 @@ function DinoRoar({ dinoRoar }) {
       <img src={dinoIcon} alt="dino roar" className="clubIcon" />
       <div className="costWrap">
         <img src={meat} alt="cost" className="meatCost" />
-        <div className="costText">25</div>
+        <div className="costText">20</div>
       </div>
     </button>
   )

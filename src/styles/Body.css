@@ -6,3 +6,29 @@
   height: 90vh;
   box-sizing: border-box;
 }
+
+@keyframes swing {
+  0% {
+    transform: rotate(-45deg);
+    opacity: 1;
+  }
+  50% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(45deg);
+    opacity: 1;
+  }
+}
+
+.club {
+  position: absolute;
+  width: calc(75vh / 20 * 4);
+  height: calc(75vh / 20 * 4);
+  background: url('../assets/club.png') no-repeat center center;
+  background-size: contain;
+  transform-origin: bottom left ;
+  z-index: 1000;
+  animation: swing 0.5s ease-in;
+}

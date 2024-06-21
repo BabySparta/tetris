@@ -1,0 +1,41 @@
+.infoModal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100000;
+}
+
+.infoBody {
+  width: 40vw;
+  height: fit-content;
+  background-color: rgb(219, 152, 111);
+  clip-path: polygon(
+    0% 2%, 10% 4%, 30% 0%, 50% 3%, 70% 2%, 90% 0%, 
+    100% 20%, 98% 40%, 100% 60%, 98% 80%, 
+    90% 97%, 80% 99%, 70% 100%, 60% 99%, 50% 100%, 40% 99%, 30% 100%, 20% 99%, 10% 97%, 
+    0% 90%, 2% 60%, 0% 40%, 2% 20%
+  );
+  box-sizing: border-box;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.infoTitle {
+  font-weight: bold;
+  font-size: 32px;
+}
+
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.infoBullet {
+  font-size: 18px;
+}

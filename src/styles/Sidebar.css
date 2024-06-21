@@ -5,19 +5,23 @@
 
 .sidebar {
   padding: 20px;
-  background: #ea9c61; /* Base color for the rock */
+  background: #ea9c61; 
   clip-path: polygon(
-    0% 2%, 10% 3%, 30% 1%, 50% 0%, 70% 1%, 90% 0%, /* Moderately jagged top */
+    0% 2%, 10% 3%, 30% 1%, 50% 0%, 70% 1%, 90% 0%, 
     100% 20%, 98% 40%, 100% 60%, 98% 80%, 
-    90% 97%, 80% 99%, 70% 100%, 60% 99%, 50% 100%, 40% 99%, 30% 100%, 20% 99%, 10% 97%, /* Moderately jagged bottom */
+    90% 97%, 80% 99%, 70% 100%, 60% 99%, 50% 100%, 40% 99%, 30% 100%, 20% 99%, 10% 97%, 
     0% 90%, 2% 60%, 0% 40%, 2% 20%
   );
-  position: relative; 
+  position: relative;
+  width: 10vw;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .moneyWrap {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   gap: 12px;
 }
@@ -38,7 +42,7 @@
 
 .nextPTitle {
   font-family: PaintSubfont, sans-serif;
-  font-size: 32px;
+  font-size: 24px;
 }
 
 .display {
@@ -57,6 +61,15 @@
   outline: solid rgb(61, 61, 61) 1px;
 }
 
+.powerWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
 .powerUpButton {
   background-color: tan;
   border: 3px solid rgb(97, 63, 0);
@@ -65,6 +78,11 @@
   flex-direction: column;
   gap: 12px;
   transition: ease-in-out 0.2s;
+  aspect-ratio: 1/1;
+  width: 90%;
+  position: relative;
+  justify-content: center;
+  align-items: center;
 }
 
 .powerUpButton:hover {
@@ -73,7 +91,7 @@
 }
 
 .clubIcon {
-  width: 64px;
+  width: 80%;
 }
 
 .costWrap {

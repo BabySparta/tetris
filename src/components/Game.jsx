@@ -7,13 +7,30 @@ import { checkCollision, checkLoss, createBoard } from "../utils/heplers";
 import Sidebar from "../UI/Sidebar";
 
 function Game() {
-  const [player, nextPiece, updatePosition, resetPlayer, rotate, setCollided, setPlayer] = usePlayer();
+  const [
+    player,
+    nextPiece,
+    updatePosition,
+    resetPlayer,
+    rotate,
+    setCollided,
+    setPlayer,
+  ] = usePlayer();
   const [gameSpeed, setGameSpeed] = useState(1000);
-  const [board, setBoard, rowsCleared, setRowsCleared, totalRowsCleared, setTotalRowsCleared] = useBoard(player, resetPlayer);
+  const [
+    board,
+    setBoard,
+    rowsCleared,
+    setRowsCleared,
+    totalRowsCleared,
+    setTotalRowsCleared,
+  ] = useBoard(player, resetPlayer);
   const [gameOver, setGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [money, setMoney] = useState(0);
   const [isClubSmashActive, setIsClubSmashActive] = useState(false);
+  const [isDinoRoarActive, setIsDinoRoarActive] = useState(false);
+  const [clubSmashPosition, setClubSmashPosition] = useState(null);
 
   const playerRef = useRef(player);
   const boardRef = useRef(board);
@@ -28,29 +45,32 @@ function Game() {
   }, [board]);
 
   useEffect(() => {
-    if(checkLoss(boardRef.current)) {
+    if (checkLoss(boardRef.current)) {
       setGameOver(true);
     }
-  }, [board])
+  }, [board]);
 
   const drop = useCallback(() => {
     if (isDropping.current) {
       return;
     }
-    isDropping.current = true
+    isDropping.current = true;
 
     const currentBoard = boardRef.current;
     const currentPlayer = playerRef.current;
 
-    if (checkCollision(currentBoard, currentPlayer, 0, 1) && !currentPlayer.collided) {
+    if (
+      checkCollision(currentBoard, currentPlayer, 0, 1) &&
+      !currentPlayer.collided
+    ) {
       setCollided();
     } else {
       updatePosition(0, 1);
     }
-    isDropping.current = false
+    isDropping.current = false;
   }, []);
 
-  const dropMax = useCallback(() => {   
+  const dropMax = useCallback(() => {
     const currentBoard = boardRef.current;
     const currentPlayer = playerRef.current;
     let maxSquaresToDrop = currentBoard.length;
@@ -61,7 +81,9 @@ function Game() {
           let squaresToDrop = 0;
           while (
             currentBoard[currentPlayer.yPos + y + squaresToDrop + 1] &&
-            currentBoard[currentPlayer.yPos + y + squaresToDrop + 1][currentPlayer.xPos + x][1] === "clear"
+            currentBoard[currentPlayer.yPos + y + squaresToDrop + 1][
+              currentPlayer.xPos + x
+            ][1] === "clear"
           ) {
             squaresToDrop++;
           }
@@ -72,48 +94,50 @@ function Game() {
       }
     }
 
-    setPlayer(prev => ({
+    setPlayer((prev) => ({
       ...prev,
       yPos: currentPlayer.yPos + maxSquaresToDrop,
       collided: true,
-    }))
-
+    }));
   }, [updatePosition]);
 
-  const move = useCallback((event) => {
-    const { key } = event;
-    if (isDropping.current || gameOver || isPaused) {
+  const move = useCallback(
+    (event) => {
+      const { key } = event;
+      if (isDropping.current || gameOver || isPaused) {
         return;
-    }
-    isDropping.current = true;
+      }
+      isDropping.current = true;
 
-    const currentBoard = boardRef.current;
-    const currentPlayer = playerRef.current;
+      const currentBoard = boardRef.current;
+      const currentPlayer = playerRef.current;
 
-    if (key === "a") {
-        if (!checkCollision(currentBoard, currentPlayer, -1, 0)) updatePosition(-1, 0);
-    } else if (key === "d") {
-        if (!checkCollision(currentBoard, currentPlayer, 1, 0)) updatePosition(1, 0);
-    } else if (key === "s") {
+      if (key === "a") {
+        if (!checkCollision(currentBoard, currentPlayer, -1, 0))
+          updatePosition(-1, 0);
+      } else if (key === "d") {
+        if (!checkCollision(currentBoard, currentPlayer, 1, 0))
+          updatePosition(1, 0);
+      } else if (key === "s") {
         if (!checkCollision(currentBoard, currentPlayer, 0, 1)) {
-            updatePosition(0, 1);
+          updatePosition(0, 1);
         }
-    } else if (key === ' ') {
+      } else if (key === " ") {
         event.preventDefault();
         dropMax();
-    } else if (key === 'w') {
+      } else if (key === "w") {
         rotate(currentBoard);
-    }
-    isDropping.current = false;
-}, [updatePosition, dropMax, rotate, gameOver]);
+      }
+      isDropping.current = false;
+    },
+    [updatePosition, dropMax, rotate, gameOver]
+  );
 
-
-  
   useEffect(() => {
     const calculateGameSpeed = () => {
-      return 1000 * Math.pow(0.9, Math.floor(totalRowsCleared/10));
+      return 1000 * Math.pow(0.9, Math.floor(totalRowsCleared / 10));
     };
-    setGameSpeed(prevSpeed => calculateGameSpeed(prevSpeed));
+    setGameSpeed((prevSpeed) => calculateGameSpeed(prevSpeed));
   }, [totalRowsCleared]);
 
   useEffect(() => {
@@ -131,8 +155,8 @@ function Game() {
   }, [move, isPaused]);
 
   useEffect(() => {
-    if(gameOver || isPaused) return;
-    
+    if (gameOver || isPaused) return;
+
     const dropInterval = setInterval(() => {
       drop();
     }, gameSpeed);
@@ -142,30 +166,38 @@ function Game() {
 
   useEffect(() => {
     const calculateMoneyEarned = () => {
-      if (rowsCleared/2 >= 4) {
-        return rowsCleared * 2
-      } else if (rowsCleared/2 === 3) {
-        return rowsCleared * 1.5
-      } else if (rowsCleared/2 === 2) {
-        return rowsCleared * 1.25
+      if (rowsCleared / 2 >= 4) {
+        return rowsCleared * 2;
+      } else if (rowsCleared / 2 === 3) {
+        return rowsCleared * 1.5;
+      } else if (rowsCleared / 2 === 2) {
+        return rowsCleared * 1.25;
       } else {
-        return rowsCleared
+        return rowsCleared;
       }
-    }
+    };
 
     setMoney((prev) => prev + calculateMoneyEarned());
-  }, [rowsCleared])
+  }, [rowsCleared]);
 
   useEffect(() => {
     if (!isClubSmashActive) {
-      document.querySelectorAll('.highlight').forEach(cell => {
-        cell.classList.remove('highlight');
+      document.querySelectorAll(".highlight").forEach((cell) => {
+        cell.classList.remove("highlight");
       });
     }
   }, [isClubSmashActive]);
 
+  useEffect(() => {
+    if (isDinoRoarActive) {
+      document.querySelector(".board").classList.add("shake");
+    } else if (!isDinoRoarActive) {
+      document.querySelector(".board").classList.remove("shake");
+    }
+  }, [isDinoRoarActive]);
+
   const togglePause = () => {
-    setIsPaused(prev => !prev);
+    setIsPaused((prev) => !prev);
   };
 
   const activateClubSmash = () => {
@@ -173,56 +205,67 @@ function Game() {
       setIsClubSmashActive(true);
       togglePause();
     }
-      
   };
 
   const clubSmash = (x, y) => {
-    const newBoard = board.map((row, rowIndex) => 
-      row.map((cell, colIndex) => 
-        (rowIndex >= y - 1 && rowIndex <= y + 1 && colIndex >= x - 1 && colIndex <= x + 1) 
-          ? [0, "clear"] 
+    const newBoard = board.map((row, rowIndex) =>
+      row.map((cell, colIndex) =>
+        rowIndex >= y - 1 &&
+        rowIndex <= y + 1 &&
+        colIndex >= x - 1 &&
+        colIndex <= x + 1
+          ? [0, "clear"]
           : cell
       )
     );
-  
+
     setBoard(newBoard);
-    setMoney(prev => prev - 10);
-  };  
+    setMoney((prev) => prev - 10);
+  };
 
   const handleTileClick = (x, y) => {
     if (isClubSmashActive) {
-      clubSmash(x, y);
-      setIsClubSmashActive(false);
-      togglePause();
+      setClubSmashPosition({ x, y })
+      setTimeout(() => {
+        clubSmash(x, y);
+        setIsClubSmashActive(false);
+        togglePause();
+        setClubSmashPosition(null)
+      }, 500)
     }
   };
 
   const dinoRoar = () => {
-    const newBoard = board.map(row => row.slice()); 
-  
-    for (let col = 0; col < newBoard[0].length; col++) {
-      let nonClearCells = [];
-      for (let row = 0; row < newBoard.length; row++) {
-        if (newBoard[row][col][0] !== 0) {
-          nonClearCells.push(newBoard[row][col]);
+    setIsDinoRoarActive(true);
+
+    setTimeout(() => {
+      setIsDinoRoarActive(false);
+      const newBoard = board.map((row) => row.slice());
+
+      for (let col = 0; col < newBoard[0].length; col++) {
+        let nonClearCells = [];
+        for (let row = 0; row < newBoard.length; row++) {
+          if (newBoard[row][col][1] === 'merged') {
+            nonClearCells.push(newBoard[row][col]);
+          }
+        }
+        for (let row = newBoard.length - 1; row >= 0; row--) {
+          if (nonClearCells.length > 0) {
+            newBoard[row][col] = nonClearCells.pop();
+          } else {
+            newBoard[row][col] = [0, "clear"];
+          }
         }
       }
-      for (let row = newBoard.length - 1; row >= 0; row--) {
-        if (nonClearCells.length > 0) {
-          newBoard[row][col] = nonClearCells.pop();
-        } else {
-          newBoard[row][col] = [0, "clear"];
-        }
-      }
-    }
-  
-    setBoard(newBoard);
+
+      setBoard(newBoard);
+    }, 500);
   };
-  
+
   const triggerDinoRoar = () => {
     if (money >= 20) {
       dinoRoar();
-      setMoney(prev => prev - 20); 
+      setMoney((prev) => prev - 20);
     }
   };
 
@@ -234,12 +277,25 @@ function Game() {
     setGameOver(false);
     setGameSpeed(1000);
     setMoney(0);
-  }
+  };
 
   return (
     <div className="game">
-      <Board board={board} gameOver={gameOver} resetGame={resetGame} handleTileClick={handleTileClick} isClubSmashActive={isClubSmashActive}/>
-      <Sidebar nextPiece={nextPiece} money={money} totalRowsCleared={totalRowsCleared} clubSmash={activateClubSmash} dinoRoar={triggerDinoRoar}/>
+      <Board
+        board={board}
+        gameOver={gameOver}
+        resetGame={resetGame}
+        handleTileClick={handleTileClick}
+        isClubSmashActive={isClubSmashActive}
+        clubSmashPosition={clubSmashPosition}
+      />
+      <Sidebar
+        nextPiece={nextPiece}
+        money={money}
+        totalRowsCleared={totalRowsCleared}
+        clubSmash={activateClubSmash}
+        dinoRoar={triggerDinoRoar}
+      />
     </div>
   );
 }
