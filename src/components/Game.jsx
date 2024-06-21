@@ -5,6 +5,7 @@ import "../styles/game.css";
 import { usePlayer } from "../hooks/usePlayer";
 import { checkCollision, checkLoss, createBoard } from "../utils/heplers";
 import Sidebar from "../UI/Sidebar";
+import InfoModal from "./InfoModal";
 
 function Game() {
   const [
@@ -31,6 +32,7 @@ function Game() {
   const [isClubSmashActive, setIsClubSmashActive] = useState(false);
   const [isDinoRoarActive, setIsDinoRoarActive] = useState(false);
   const [clubSmashPosition, setClubSmashPosition] = useState(null);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const playerRef = useRef(player);
   const boardRef = useRef(board);
@@ -269,6 +271,11 @@ function Game() {
     }
   };
 
+  const handleInfoClick = () => {
+    togglePause();
+    setIsInfoOpen(prev => !prev);
+  }
+
   const resetGame = () => {
     setBoard(createBoard());
     resetPlayer();
@@ -281,6 +288,9 @@ function Game() {
 
   return (
     <div className="game">
+      {isInfoOpen && 
+        <InfoModal handleInfoClick={handleInfoClick}/>
+      }
       <Board
         board={board}
         gameOver={gameOver}
@@ -295,6 +305,7 @@ function Game() {
         totalRowsCleared={totalRowsCleared}
         clubSmash={activateClubSmash}
         dinoRoar={triggerDinoRoar}
+        handleInfoClick={handleInfoClick}
       />
     </div>
   );

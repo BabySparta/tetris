@@ -1,7 +1,21 @@
+@font-face {
+  font-family: PaintSubfont;
+  src: url('../assets/PaintSubfont.ttf');
+}
+
+@font-face {
+  font-family: Caveman;
+  src: url("../assets/CAVEMAN_.TTF") format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 .infoModal {
   position: absolute;
   width: 100%;
   height: 100%;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,6 +23,7 @@
 }
 
 .infoBody {
+  position: relative;
   width: 40vw;
   height: fit-content;
   background-color: rgb(219, 152, 111);
@@ -25,9 +40,11 @@
   gap: 12px;
 }
 
-.infoTitle {
+.infoTitle, .closeInfo {
   font-weight: bold;
   font-size: 32px;
+  font-family: Caveman, sans-serif;
+  color: black;
 }
 
 .infoList {
@@ -38,4 +55,34 @@
 
 .infoBullet {
   font-size: 18px;
+  font-family: PaintSubFont, sans-serif;
+  color: black;
+}
+
+.closeInfo {
+  position: absolute;
+  top: 32px;
+  right: 64px;
+  background-color: transparent;
+  padding: 0px;
+  border: none;
+  outline: none;
+  transition: 0.2s ease-in-out;
+}
+
+.closeInfo:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.closeInfo:focus {
+  outline: none;
+  border: none;
+}
+
+.confusedCaveman {
+  position: absolute;
+  right: 20%;
+  top: 15%;
+  width: 30%;
 }
