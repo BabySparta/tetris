@@ -175,7 +175,7 @@ function Game() {
       } else if (rowsCleared === 2) {
         return rowsCleared * 2.5;
       } else {
-        return rowsCleared;
+        return rowsCleared * 2;
       }
     };
 
