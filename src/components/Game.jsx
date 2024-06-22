@@ -137,7 +137,7 @@ function Game() {
 
   useEffect(() => {
     const calculateGameSpeed = () => {
-      return 1000 * Math.pow(0.8, Math.floor(totalRowsCleared / 10));
+      return 1000 * Math.pow(0.8, Math.floor(totalRowsCleared / 5));
     };
     setGameSpeed((prevSpeed) => calculateGameSpeed(prevSpeed));
   }, [totalRowsCleared]);
@@ -168,12 +168,12 @@ function Game() {
 
   useEffect(() => {
     const calculateMoneyEarned = () => {
-      if (rowsCleared / 2 >= 4) {
-        return rowsCleared * 2;
-      } else if (rowsCleared / 2 === 3) {
-        return rowsCleared * 1.5;
-      } else if (rowsCleared / 2 === 2) {
-        return rowsCleared * 1.25;
+      if (rowsCleared >= 4) {
+        return rowsCleared * 4;
+      } else if (rowsCleared === 3) {
+        return rowsCleared * 3;
+      } else if (rowsCleared === 2) {
+        return rowsCleared * 2.5;
       } else {
         return rowsCleared;
       }

@@ -10,7 +10,7 @@ function Sidebar({ nextPiece, money, totalRowsCleared, clubSmash, dinoRoar, hand
   return (
     <div className="sidebar">
       <NextPiece nextPiece={nextPiece}/>
-      <div className="level">Level {Math.floor(totalRowsCleared/10) + 1}</div>
+      <div className="level">Level {Math.floor(totalRowsCleared/5) + 1}</div>
       <div className="moneyWrap">
         <img src={meatIcon} alt="meat" className="meatIcon"/>
         <div className="moneyVal">{money}</div>
