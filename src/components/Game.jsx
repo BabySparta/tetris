@@ -259,9 +259,9 @@ function Game() {
             newBoard[row][col] = [0, "clear"];
           }
         }
-        togglePause();
       }
-
+      
+      togglePause();
       setBoard(newBoard);
     }, 500);
   };
